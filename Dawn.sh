@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# v1.0.0
+
 # 脚本保存路径
 SCRIPT_PATH="/home/Dawn.sh"
 DAWN_DIR="/home/Dawn"
@@ -80,37 +82,37 @@ function install_and_configure() {
     read -p "请输入密码: " password
     read -p "请输入2captcha API密钥: " captcha_key
 
-    # 验证输入不为空
-    while [[ -z "$email" || -z "$password" || -z "$captcha_key" ]]; do
-        echo "错误：邮箱、密码和2captcha API密钥都不能为空！"
-        read -p "请输入邮箱: " email
-        read -p "请输入密码: " password
-        read -p "请输入2captcha API密钥: " captcha_key
-    done
+    # # 验证输入不为空
+    # while [[ -z "$email" || -z "$password" || -z "$captcha_key" ]]; do
+    #     echo "错误：邮箱、密码和2captcha API密钥都不能为空！"
+    #     read -p "请输入邮箱: " email
+    #     read -p "请输入密码: " password
+    #     read -p "请输入2captcha API密钥: " captcha_key
+    # done
 
-    # 更新settings.yaml文件中的two_captcha_api_key
-    settings_file="$DAWN_DIR/config/settings.yaml"
-    if [ -f "$settings_file" ]; then
-        # 使用sed替换two_captcha_api_key的值
-        sed -i "s/two_captcha_api_key: .*/two_captcha_api_key: \"$captcha_key\"/" "$settings_file"
-    else
-        echo "错误：未找到settings.yaml文件"
-        exit 1
-    fi
+    # # 更新settings.yaml文件中的two_captcha_api_key
+    # settings_file="$DAWN_DIR/config/settings.yaml"
+    # if [ -f "$settings_file" ]; then
+    #     # 使用sed替换two_captcha_api_key的值
+    #     sed -i "s/two_captcha_api_key: .*/two_captcha_api_key: \"$captcha_key\"/" "$settings_file"
+    # else
+    #     echo "错误：未找到settings.yaml文件"
+    #     exit 1
+    # fi
 
-    # 组合成需要的格式并写入farm.txt
-    email_token="${email}:${password}"
-    farm_file="$DAWN_DIR/config/data/farm.txt"
-    echo "$email_token" > "$farm_file"
-    echo "账户信息已写入 $farm_file"
+    # # 组合成需要的格式并写入farm.txt
+    # email_token="${email}:${password}"
+    # farm_file="$DAWN_DIR/config/data/farm.txt"
+    # echo "$email_token" > "$farm_file"
+    # echo "账户信息已写入 $farm_file"
 
-    # 配置代理信息
-    read -p "请输入您的代理信息，格式为 (http://user:pass@ip:port): " proxy_info
-    proxies_file="$DAWN_DIR/config/data/proxies.txt"
+    # # 配置代理信息
+    # read -p "请输入您的代理信息，格式为 (http://user:pass@ip:port): " proxy_info
+    # proxies_file="$DAWN_DIR/config/data/proxies.txt"
 
-    # 将代理信息写入文件
-    echo "$proxy_info" > "$proxies_file"
-    echo "代理信息已添加到 $proxies_file."
+    # # 将代理信息写入文件
+    # echo "$proxy_info" > "$proxies_file"
+    # echo "代理信息已添加到 $proxies_file."
 
     echo "安装、克隆、虚拟环境设置和配置已完成！"
     echo "正在运行脚本 python3 run.py..."
@@ -123,6 +125,7 @@ function install_and_configure() {
     tmux send-keys -t dawn "python3.11 run.py" C-m  # 启动 main.py
     echo "使用 'tmux attach -t dawn' 命令来查看日志。"
     echo "要退出 tmux 会话，请按 Ctrl+B 然后按 D。"
+    echo "请配置proxies.txt login_accounts.txt farm_accounts.txt Settings.yaml后再开启挖矿"
 
     # 提示用户按任意键返回主菜单
     read -n 1 -s -r -p "按任意键返回主菜单..."
@@ -132,15 +135,14 @@ function install_and_configure() {
 function main_menu() {
     while true; do
         clear
-        echo "脚本由大赌社区哈哈哈哈编写，推特 @ferdie_jhovie，免费开源，请勿相信收费"
-        echo "如有问题，可联系推特，仅此只有一个号"
+        echo "免费开源，请勿相信收费"
         echo "================================================================"
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
         echo "1. 安装部署 Dawn"
         echo "2. 退出"
 
-        read -p "请输入您的选择 (1,2,3,4,5,6): " choice
+        read -p "请输入您的选择 (1,2): " choice
         case $choice in
             1)
                 install_and_configure  # 调用安装和配置函数
